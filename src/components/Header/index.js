@@ -35,13 +35,7 @@ function Header({ searching, setIsLightMode, isLightMode }) {
 
   return (
     <div className={styles.header}>
-      <Logo
-        image={
-          (isLightMode && "/images/Logo_corebiz2020.png") ||
-          "/images/Logo_corebiz2020-blanco.png"
-        }
-        alt="Corebiz"
-      />
+      <Logo image={(isLightMode && "/images/Logo_corebiz2020.png") || "/images/Logo_corebiz2020-blanco.png"} alt="Corebiz" />
       <Search searching={searching} />
       <Nav>
         <Button href="/mi-cuenta" type="link">
@@ -50,25 +44,12 @@ function Header({ searching, setIsLightMode, isLightMode }) {
         <Button href="/mi-perfil" type="link">
           Mi Perfil
         </Button>
-        <Button href="/mis-favoritos" type="link">
-          Mis Favoritos
+        <Button href="/chat" type="link">
+          Chat
         </Button>
-        <div
-          className={styles.right}
-          onClick={() => setIsLightMode(!isLightMode)}
-        >
+        <div className={styles.right} onClick={() => setIsLightMode(!isLightMode)}>
           <div id={styles.toggleTheme} className="bg-third-back">
-            <div
-              className={`bg-main-back ${styles.cirleButton} ${
-                (isLightMode && styles.left) || styles.right
-              }`}
-            >
-              {(isLightMode && (
-                <span className={`material-icons c-base`}>wb_sunny</span>
-              )) || (
-                <span className={`material-icons c-base`}>nights_stay</span>
-              )}
-            </div>
+            <div className={`bg-main-back ${styles.cirleButton} ${(isLightMode && styles.left) || styles.right}`}>{(isLightMode && <span className={`material-icons c-base`}>wb_sunny</span>) || <span className={`material-icons c-base`}>nights_stay</span>}</div>
           </div>
         </div>
       </Nav>
