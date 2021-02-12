@@ -323,27 +323,41 @@ export default function Chat() {
 
   const [viewReactions, setViewReactions] = useState(false);
 
-  const addComments = comments;
+  
 
   function handleComments(e) {
     if (e.keyCode === 13) {
-      addComments.push({
-        idComment: Math.random() * (100000 - 1) + 1,
-        strComment,
-        reaction: "",
-      });
+      const addComments = [...comments, {idComment: Math.random() * (100000 - 1) + 1,strComment}];
       setComments(addComments);
       setStrComment("");
     }
   }
 
   function handleClickIcons(e, val) {
-    addComments.push({
-      idComment: Math.random() * (100000 - 1) + 1,
-      strComment: val,
-      reaction: "",
-    });
+    const addComments = [...comments, {idComment: Math.random() * (100000 - 1) + 1,strComment: val}]
+    setComments(addComments)
     setViewIcons(false);
+  }
+
+  const getFirstReaction = (newReaction) => {return {reaction:newReaction,cantidad:1}}
+
+  const createReactionsArray = (oldComment,newReactionObject) => {
+    const newComments = comments.map (comment => comment.id === oldComment.id ? {...oldComment,reactions:[newReactionObject]} : comment)
+    setComments(newComments)
+  }
+
+  const addToReactionsArray = (oldComment,newReaction) => {
+    const existingReaction = oldComment.reactions.find(item => item.reaction === newReaction)
+    const newReactionsArray = existingReaction ? oldComment.reactions.map(reaction => reaction.reaction === newReaction ? {...reaction,cantidad:reaction.cantidad+1}:reaction) : [...oldComment.reactions,{reaction:newReaction,cantidad:1}]
+    const newComments = comments.map (comment => comment.id === oldComment.id ? {...oldComment,reactions:newReactionsArray} : comment)
+    setComments(newComments)
+  }
+
+  const handleReaction = (e,id) =>{
+    const newReaction = e.target.innerHTML
+    const oldComment = comments.find(item => item.idComment === id)
+    oldComment.reactions ? addToReactionsArray(oldComment,newReaction) : createReactionsArray(oldComment,getFirstReaction(newReaction))
+    setViewReactions(false)
   }
 
   return (
@@ -351,7 +365,7 @@ export default function Chat() {
       <div className={styles.feed}>
         <div className={styles.stackComments}>
           {comments.length &&
-            comments.map(({ idComment, strComment, reaction }, key) => {
+            comments.map(({ idComment, strComment, reactions }, key) => {
               return (
                 <div className={styles.wrapComment}>
                   <div className={styles.reaction}>
@@ -359,21 +373,23 @@ export default function Chat() {
                     {viewReactions && (
                       <div className={styles.reactionSelector}>
                         {REACTIONS_LIST.map((icon) => {
-                          return <div className={styles.iReaction}>{icon}</div>;
+                          return <div className={styles.iReaction} onClick={(e)=>handleReaction(e,idComment)}>{icon}</div>;
                         })}
                       </div>
                     )}
                     <div className={styles.iconsReaction} onClick={() => setViewReactions(!viewReactions)}>
-                      😀
+                    😀
                     </div>
                   </div>
                   <div className={styles.comment}>
                     <span>{strComment}</span>
-                    {/* FIXME: 4: Mostrar reacción en cada comentario e incrementar el contador por cada click en su misma reacción~ Tarea para el equipo */}
-                    {/* <div className={styles.selectedMotion}>
-                      <span>😈 </span>
-                      <span>1</span>
-                    </div> */}
+                      {
+                       reactions ?
+                       <div className={styles.selectedMotion}> 
+                        {reactions.map(item=><> <span>{item.reaction}</span><span>{item.cantidad}</span> </>)}
+                       </div>
+                        : null
+                      }
                   </div>
                 </div>
               );
