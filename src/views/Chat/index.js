@@ -342,14 +342,14 @@ export default function Chat() {
   const getFirstReaction = (newReaction) => {return {reaction:newReaction,cantidad:1}}
 
   const createReactionsArray = (oldComment,newReactionObject) => {
-    const newComments = comments.map (comment => comment.id === oldComment.id ? {...oldComment,reactions:[newReactionObject]} : comment)
+    const newComments = comments.map (comment => comment.idComment === oldComment.idComment ? {...oldComment,reactions:[newReactionObject]} : comment)
     setComments(newComments)
   }
 
   const addToReactionsArray = (oldComment,newReaction) => {
     const existingReaction = oldComment.reactions.find(item => item.reaction === newReaction)
     const newReactionsArray = existingReaction ? oldComment.reactions.map(reaction => reaction.reaction === newReaction ? {...reaction,cantidad:reaction.cantidad+1}:reaction) : [...oldComment.reactions,{reaction:newReaction,cantidad:1}]
-    const newComments = comments.map (comment => comment.id === oldComment.id ? {...oldComment,reactions:newReactionsArray} : comment)
+    const newComments = comments.map (comment => comment.idComment === oldComment.idComment ? {...oldComment,reactions:newReactionsArray} : comment)
     setComments(newComments)
   }
 
