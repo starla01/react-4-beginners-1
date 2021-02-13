@@ -333,7 +333,7 @@ export default function Chat() {
     }
   }
 
-  const handleReactionClick = idComment => setViewReactions(idComment)
+  const handleReactionClick = idComment => viewReactions ? setViewReactions(false) : setViewReactions(idComment)
 
   function handleClickIcons(e, val) {
     const addComments = [...comments, {idComment: Math.random() * (100000 - 1) + 1,strComment: val}]
