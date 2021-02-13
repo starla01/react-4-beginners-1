@@ -333,6 +333,8 @@ export default function Chat() {
     }
   }
 
+  const handleReactionClick = idComment => viewReactions ? setViewReactions(false) : setViewReactions(idComment)
+
   function handleClickIcons(e, val) {
     const addComments = [...comments, {idComment: Math.random() * (100000 - 1) + 1,strComment: val}]
     setComments(addComments)
@@ -370,14 +372,14 @@ export default function Chat() {
                 <div className={styles.wrapComment}>
                   <div className={styles.reaction}>
                     {/* FIXME: 3: Mostrar popUp de reacciones y asignar un areaccion a comentario */}
-                    {viewReactions && (
+                    {viewReactions === idComment && (
                       <div className={styles.reactionSelector}>
                         {REACTIONS_LIST.map((icon) => {
                           return <div className={styles.iReaction} onClick={(e)=>handleReaction(e,idComment)}>{icon}</div>;
                         })}
                       </div>
                     )}
-                    <div className={styles.iconsReaction} onClick={() => setViewReactions(!viewReactions)}>
+                    <div className={styles.iconsReaction} onClick={() => handleReactionClick(idComment)}>
                     😀
                     </div>
                   </div>
